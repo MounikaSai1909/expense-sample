@@ -11,9 +11,9 @@ N="\e[0m"
 VALIDATE(){
     if [ $1 -ne 0 ]
         then
-            echo " $2 ....... SUCCESS"
+            echo -e " $2 $R....... SUCCESS $N"
         else
-            echo " $2 ....... FAILURE"
+            echo -e " $2 $G....... FAILURE $N"
     fi
 
 }
@@ -24,3 +24,12 @@ if [ $USERID -ne 0 ]
     else    
         echo " you are a super user "
 fi
+
+dnf install mysql-server -y &>>$LOGFILE
+VALIDATE $? "Installing MySQL Server"
+
+systemctl enable mysqld &>>$LOGFILE
+VALIDATE $? "Enabling MySQL Server"
+
+systemctl start mysqld &>>$LOGFILE
+VALIDATE $? "Starting MySQL Server"
