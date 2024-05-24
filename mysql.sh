@@ -10,19 +10,19 @@ N="\e[0m"
 
 VALIDATE(){
     if [ $1 -ne 0 ]
-        then
-            echo -e " $2 $G....... SUCCESS $N"
-        else
-            echo -e " $2 $R....... FAILURE $N"
+    then
+        echo -e " $2 $G....... SUCCESS $N"
+    else
+        echo -e " $2 $R....... FAILURE $N"
     fi
 
 }
 
 if [ $USERID -ne 0 ]
-    then
-        echo " please run with root access "
-        exit 1
-    else    
+then
+    echo " please run with root access "
+    exit 1
+else    
         echo " you are a super user "
 fi
 
@@ -34,3 +34,4 @@ VALIDATE $? "Enabling MySQL Server"
 
 systemctl start mysqld &>>$LOGFILE
 VALIDATE $? "Starting MySQL Server"
+    
