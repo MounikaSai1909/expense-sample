@@ -1,4 +1,4 @@
-!#/bin/bash
+#!/bin/bash
 USERID=$(id -u)
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 TIMESTAMP=$(date +%F-%H-%M-%S)
@@ -18,7 +18,7 @@ VALIDATE(){
 
 }
 
-if [ $USERID -ne 0]
+if [ $USERID -ne 0 ]
     then
         echo " please run with root access "
     else    
