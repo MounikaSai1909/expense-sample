@@ -9,7 +9,7 @@ Y="\e[33m"
 N="\e[0m"
 
 VALIDATE(){
-    if [ $1 -ne 0 ]
+    if [ $1 -eq 0 ]
     then
         echo -e " $2 $G....... SUCCESS $N"
     else
@@ -23,15 +23,15 @@ then
     echo " please run with root access "
     exit 1
 else    
-        echo " you are a super user "
+    echo " you are a super user "
 fi
 
-dnf install mysql-server -y &>>$LOGFILE
+dnf install mysql-server -y &>> $LOGFILE
 VALIDATE $? "Installing MySQL Server"
 
-systemctl enable mysqld &>>$LOGFILE
+systemctl enable mysqld &>> $LOGFILE
 VALIDATE $? "Enabling MySQL Server"
 
-systemctl start mysqld &>>$LOGFILE
+systemctl start mysqld &>> $LOGFILE
 VALIDATE $? "Starting MySQL Server"
     
