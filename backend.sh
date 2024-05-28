@@ -9,7 +9,8 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-
+echo "Please enter db password"
+read -s mysql_root_password
 
 VALIDATE(){
     if [ $1 -ne 0 ]
@@ -49,3 +50,41 @@ then
 else
     echo -e "Expense user already created $Y SKIPPING $N"
 fi
+
+mkdir /app &>>$LOG_FILE
+VALIDATE $? "Creating app directory"
+
+curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>>$LOG_FILE
+VALIDATE $? "downloading backend code"
+
+cd /app
+unzip /tmp/backend.zip &>>$LOG_FILE
+VALIDATE $? "Extracting backend code"
+
+npm install &>>$LOG_FILE
+VALIDATE $? "Installing nodejs dependencies"
+
+cp /home/ec2-user/expense-shell/backend.service /etc/systemd/system/backend.service &>>$LOG_FILE
+VALIDATE $? "Copied backend service"
+
+systemctl daemon-reload &>>$LOG_FILE
+VALIDATE $? "daemon reload"
+
+systemctl start backend &>>$LOG_FILE
+VALIDATE $? "Starting backend"
+
+systemctl enable backend &>>$LOG_FILE
+VALIDATE $? "enabling backend"
+
+dnf install mysql -y &>>$LOG_FILE
+VALIDATE $? "Installing mysql client"
+
+mysql -h db.mounka.online -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOG_FILE
+VALIDATE $? "Schema Loading"
+
+systemctl restart backend &>>$LOG_FILE
+VALIDATE $? "Restarting backend"
+
+
+
+
