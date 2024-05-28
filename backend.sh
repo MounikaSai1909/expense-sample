@@ -79,7 +79,7 @@ VALIDATE $? "enabling backend"
 dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "Installing mysql client"
 
-mysql -h db.mounka.online -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOG_FILE
+mysql --host=54.235.58.216 --user=root --password=${mysql_root_password} -e 'SHOW DATABASES;' &>> $LOG_FILE
 VALIDATE $? "Schema Loading"
 
 systemctl restart backend &>>$LOG_FILE
