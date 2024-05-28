@@ -8,6 +8,9 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
+echo "Please enter db password"
+read -s mysql_root_password
+
 VALIDATE(){
     if [ $1 -eq 0 ]
     then
@@ -38,12 +41,13 @@ VALIDATE $? "Starting MySQL Server"
 #mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
 #VALIDATE $? "Setting up password"
 
-#BELOW CODE WILL BE USED FOR IDEMPOTENT NATURE
-mysql -h db.mounka.online -uroot -pExpenseApp@1 -e 'show databases;' &>>$LOGFILE
+
+#Below code will be useful for idemponent nature
+mysql --host=54.163.219.13 --user=root --password=${mysql_root_password} -e 'SHOW DATABASES;' &>> $LOG_FILE
 if [ $? -ne 0 ]
-then 
-    mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
-    VALIDATE $? "MYSQL Root password Setup"
-else
-    echo -e "MySQL Root password is already setup....$Y SKIPPING $N"
-    fi    
+then
+   mysql_secure_installation --set-root-pass ${mysql_root_password} &>> $LOG_FILE
+   VALIDATE $? "Setting up the root password"
+else 
+    echo -e "MySQL root password is already setup.. $Y SKIPPING  $N"
+fi
