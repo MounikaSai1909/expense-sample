@@ -43,11 +43,11 @@ VALIDATE $? "Starting MySQL Server"
 
 
 #Below code will be useful for idemponent nature
-mysql --host=54.163.219.13 --user=root --password=${mysql_root_password} -e 'SHOW DATABASES;' &>> $LOG_FILE
+mysql -h db.mounka.online -uroot -p${mysql_root_password} -e 'show databases;' &>> $LOG_FILE
 if [ $? -ne 0 ]
 then
    mysql_secure_installation --set-root-pass ${mysql_root_password} &>> $LOG_FILE
-   VALIDATE $? "Setting up the root password"
+   VALIDATE $? "MySQL Root password Setup"
 else 
     echo -e "MySQL root password is already setup.. $Y SKIPPING  $N"
 fi
