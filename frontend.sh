@@ -27,26 +27,26 @@ else
     echo "You are a super user"
 fi
 
-dnf install nginx -y 
+dnf install nginx -y &>> $LOGFILE
 VALIDATE $? "Installing nginx"
 
-systemctl enable nginx
+systemctl enable nginx &>> $LOGFILE
 VALIDATE $? "Enabling nginx"
 
-systemctl start nginx
+systemctl start nginx &>> $LOGFILE
 VALIDATE $? "Starting nginx"
 
-rm -rf /usr/share/nginx/html/*
+rm -rf /usr/share/nginx/html/* &>> $LOGFILE
 VALIDATE $? "Removing Existing Content"
 
-curl -o /tmp/frontend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
+curl -o /tmp/frontend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip &>> $LOGFILE
 VALIDATE $? "Downloading Frontend Code"
 
 cd /usr/share/nginx/html
-unzip /tmp/frontend.zip
+unzip /tmp/frontend.zip &>> $LOGFILE
 VALIDATE $? "unzipping frontend code"
 
-systemctl restart nginx
+systemctl restart nginx &>> $LOGFILE
 VALIDATE $? "Restarting nginx"
 
 
